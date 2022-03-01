@@ -1,0 +1,32 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: NFPeace
+    network: mainnet
+    source:
+      address: "0x0000000011E48D382b4F627437A2bBAc3b10F90e"
+      abi: NFPeace
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - AuctionExtended
+        - AuctionInitialised
+        - AuctionSettled
+        - Bid
+      abis:
+        - name: NFPeace
+          file: ./abis/NFPeace.json
+      eventHandlers:
+        - event: AuctionExtended(indexed uint64,indexed uint256)
+          handler: handleAuctionExtended
+        - event: AuctionInitialised(indexed uint64)
+          handler: handleAuctionInitialised
+        - event: AuctionSettled(indexed uint64)
+          handler: handleAuctionSettled
+        - event: Bid(indexed uint64,indexed uint256,indexed address)
+          handler: handleBid
+      file: ./src/mapping.ts
