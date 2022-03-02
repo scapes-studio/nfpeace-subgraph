@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: NFPeace
@@ -19,7 +19,7 @@ dataSources:
         - Bid
       abis:
         - name: NFPeace
-          file: ./abis/NFPeace.json
+          file: NFPeace/abis/NFPeace.json
       eventHandlers:
         - event: AuctionExtended(indexed uint64,indexed uint256)
           handler: handleAuctionExtended
@@ -29,4 +29,4 @@ dataSources:
           handler: handleAuctionSettled
         - event: Bid(indexed uint64,indexed uint256,indexed address)
           handler: handleBid
-      file: ./src/mapping.ts
+      file: NFPeace/NFPeace.wasm
