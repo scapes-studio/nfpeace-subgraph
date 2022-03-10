@@ -1,4 +1,3 @@
-import { BigInt } from "@graphprotocol/graph-ts"
 import {
   NFPeaceV2,
   AuctionExtended as AuctionExtendedEvent,
@@ -38,7 +37,6 @@ export function handleAuctionSettled(event: AuctionSettledEvent): void {
 }
 
 export function handleBid(event: BidEvent): void {
-
   let bid = new Bid(event.transaction.hash.toHex());
   let user = new User(event.params.from.toHex())
   user.save()

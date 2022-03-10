@@ -15,10 +15,9 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - AuctionExtended
-        - AuctionInitialised
-        - AuctionSettled
+        - Auction
         - Bid
+        - User
       abis:
         - name: NFPeaceV1
           file: ./abis/NFPeaceV1.json
@@ -44,10 +43,9 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - AuctionExtended
-        - AuctionInitialised
-        - AuctionSettled
+        - Auction
         - Bid
+        - User
       abis:
         - name: NFPeaceV2
           file: ./abis/NFPeaceV2.json

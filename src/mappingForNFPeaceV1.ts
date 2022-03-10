@@ -1,4 +1,4 @@
-import { Address, BigInt } from "@graphprotocol/graph-ts"
+import { BigInt } from "@graphprotocol/graph-ts"
 import {
   NFPeaceV1,
   AuctionExtended as AuctionExtendedEvent,
@@ -6,11 +6,9 @@ import {
   AuctionSettled as AuctionSettledEvent,
   Bid as BidEvent
 } from "../generated/NFPeaceV1/NFPeaceV1"
-// import { NFPeaceV2 } from "../generated/NFPeaceV2/NFPeaceV2"
 import { Auction, Bid, User } from "../generated/schema"
 
 const INITIAL_AUCTION_ID_V2 = new BigInt(12)
-// const INITIAL_AUCTION_ID_V2 = NFPeaceV2.bind(Address.fromString("0xf387Ec20919c1Ba7824a79B446Ff9ef4EfB69740")).initialAuctionId()
 
 export function handleAuctionInitialised(event: AuctionInitialisedEvent): void {
   if (event.params.auctionId > INITIAL_AUCTION_ID_V2)
