@@ -7,8 +7,15 @@ type Auction @entity {
   tokenId: BigInt! # uint256
   tokenStandard: Int!
   tokenCount: Int! # uint 8
-  bids: [Bid!]! @derivedFrom(field: "auction")
+
+  createdAt: BigInt!
+  createdTransaction: String!
+
+  settledTransaction: String
+  settledAt: BigInt
   settled: Boolean!
+
+  bids: [Bid!]! @derivedFrom(field: "auction")
 }
 
 type Bid @entity {
@@ -16,6 +23,9 @@ type Bid @entity {
   auction: Auction!
   from: User!
   value: BigInt! # uint128
+
+  createdAt: BigInt!
+  createdTransaction: String!
 }
 
 type User @entity {

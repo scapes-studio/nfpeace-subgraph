@@ -23,6 +23,8 @@ export class Auction extends Entity {
     this.set("tokenId", Value.fromBigInt(BigInt.zero()));
     this.set("tokenStandard", Value.fromI32(0));
     this.set("tokenCount", Value.fromI32(0));
+    this.set("createdAt", Value.fromBigInt(BigInt.zero()));
+    this.set("createdTransaction", Value.fromString(""));
     this.set("settled", Value.fromBoolean(false));
   }
 
@@ -114,13 +116,56 @@ export class Auction extends Entity {
     this.set("tokenCount", Value.fromI32(value));
   }
 
-  get bids(): Array<string> {
-    let value = this.get("bids");
-    return value!.toStringArray();
+  get createdAt(): BigInt {
+    let value = this.get("createdAt");
+    return value!.toBigInt();
   }
 
-  set bids(value: Array<string>) {
-    this.set("bids", Value.fromStringArray(value));
+  set createdAt(value: BigInt) {
+    this.set("createdAt", Value.fromBigInt(value));
+  }
+
+  get createdTransaction(): string {
+    let value = this.get("createdTransaction");
+    return value!.toString();
+  }
+
+  set createdTransaction(value: string) {
+    this.set("createdTransaction", Value.fromString(value));
+  }
+
+  get settledTransaction(): string | null {
+    let value = this.get("settledTransaction");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set settledTransaction(value: string | null) {
+    if (!value) {
+      this.unset("settledTransaction");
+    } else {
+      this.set("settledTransaction", Value.fromString(<string>value));
+    }
+  }
+
+  get settledAt(): BigInt | null {
+    let value = this.get("settledAt");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set settledAt(value: BigInt | null) {
+    if (!value) {
+      this.unset("settledAt");
+    } else {
+      this.set("settledAt", Value.fromBigInt(<BigInt>value));
+    }
   }
 
   get settled(): boolean {
@@ -130,6 +175,15 @@ export class Auction extends Entity {
 
   set settled(value: boolean) {
     this.set("settled", Value.fromBoolean(value));
+  }
+
+  get bids(): Array<string> {
+    let value = this.get("bids");
+    return value!.toStringArray();
+  }
+
+  set bids(value: Array<string>) {
+    this.set("bids", Value.fromStringArray(value));
   }
 }
 
@@ -141,6 +195,8 @@ export class Bid extends Entity {
     this.set("auction", Value.fromString(""));
     this.set("from", Value.fromString(""));
     this.set("value", Value.fromBigInt(BigInt.zero()));
+    this.set("createdAt", Value.fromBigInt(BigInt.zero()));
+    this.set("createdTransaction", Value.fromString(""));
   }
 
   save(): void {
@@ -193,6 +249,24 @@ export class Bid extends Entity {
 
   set value(value: BigInt) {
     this.set("value", Value.fromBigInt(value));
+  }
+
+  get createdAt(): BigInt {
+    let value = this.get("createdAt");
+    return value!.toBigInt();
+  }
+
+  set createdAt(value: BigInt) {
+    this.set("createdAt", Value.fromBigInt(value));
+  }
+
+  get createdTransaction(): string {
+    let value = this.get("createdTransaction");
+    return value!.toString();
+  }
+
+  set createdTransaction(value: string) {
+    this.set("createdTransaction", Value.fromString(value));
   }
 }
 

@@ -15,13 +15,12 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - AuctionExtended
-        - AuctionInitialised
-        - AuctionSettled
+        - Auction
         - Bid
+        - User
       abis:
         - name: NFPeaceV1
-          file: NFPeaceV1\abis\NFPeaceV1.json
+          file: NFPeaceV1/abis/NFPeaceV1.json
       eventHandlers:
         - event: AuctionExtended(indexed uint64,indexed uint256)
           handler: handleAuctionExtended
@@ -31,7 +30,7 @@ dataSources:
           handler: handleAuctionSettled
         - event: Bid(indexed uint64,indexed uint256,indexed address)
           handler: handleBid
-      file: NFPeaceV1\NFPeaceV1.wasm
+      file: NFPeaceV1/NFPeaceV1.wasm
   - kind: ethereum/contract
     name: NFPeaceV2
     network: mainnet
@@ -44,13 +43,12 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - AuctionExtended
-        - AuctionInitialised
-        - AuctionSettled
+        - Auction
         - Bid
+        - User
       abis:
         - name: NFPeaceV2
-          file: NFPeaceV2\abis\NFPeaceV2.json
+          file: NFPeaceV2/abis/NFPeaceV2.json
       eventHandlers:
         - event: AuctionExtended(indexed uint64,indexed uint256)
           handler: handleAuctionExtended
@@ -60,4 +58,4 @@ dataSources:
           handler: handleAuctionSettled
         - event: Bid(indexed uint64,indexed uint256,indexed address)
           handler: handleBid
-      file: NFPeaceV2\NFPeaceV2.wasm
+      file: NFPeaceV2/NFPeaceV2.wasm
