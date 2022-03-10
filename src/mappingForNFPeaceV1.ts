@@ -69,6 +69,19 @@ export function handleBid(event: BidEvent): void {
   let user = new User(event.params.from.toHex())
   user.save()
 
+  const contract = NFPeaceV1.bind(event.address)
+  const auctionObj = contract.getAuction(event.params.auctionId);
+
+  const id = event.params.auctionId.toString()
+  let auction = Auction.load(id)
+  if (auction == null) {
+    auction = new Auction(id)
+  }
+
+  auction.latestBidder = auctionObj.value2.toHex()
+  auction.latestBid = auctionObj.value3
+  auction.save()
+
   let bid = new Bid(event.transaction.hash.toHex());
   bid.from = event.params.from.toHex();
   bid.value = event.params.bid;

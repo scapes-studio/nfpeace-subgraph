@@ -15,6 +15,9 @@ type Auction @entity {
   settledAt: BigInt
   settled: Boolean!
 
+  latestBid: BigInt!
+  latestBidder: String!
+
   bids: [Bid!]! @derivedFrom(field: "auction")
 }
 

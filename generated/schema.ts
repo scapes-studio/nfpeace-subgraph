@@ -26,6 +26,8 @@ export class Auction extends Entity {
     this.set("createdAt", Value.fromBigInt(BigInt.zero()));
     this.set("createdTransaction", Value.fromString(""));
     this.set("settled", Value.fromBoolean(false));
+    this.set("latestBid", Value.fromBigInt(BigInt.zero()));
+    this.set("latestBidder", Value.fromString(""));
   }
 
   save(): void {
@@ -175,6 +177,24 @@ export class Auction extends Entity {
 
   set settled(value: boolean) {
     this.set("settled", Value.fromBoolean(value));
+  }
+
+  get latestBid(): BigInt {
+    let value = this.get("latestBid");
+    return value!.toBigInt();
+  }
+
+  set latestBid(value: BigInt) {
+    this.set("latestBid", Value.fromBigInt(value));
+  }
+
+  get latestBidder(): string {
+    let value = this.get("latestBidder");
+    return value!.toString();
+  }
+
+  set latestBidder(value: string) {
+    this.set("latestBidder", Value.fromString(value));
   }
 
   get bids(): Array<string> {
