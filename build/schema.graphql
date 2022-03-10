@@ -1,6 +1,25 @@
-type ExampleEntity @entity {
+type Auction @entity {
+  id: ID! # auctionId
+  donor: User!
+  startingPrice: BigInt! # uint64
+  endTimestamp: BigInt! # uint32
+  tokenContract: Bytes!
+  tokenId: BigInt! # uint256
+  tokenStandard: Int!
+  tokenCount: Int! # uint 8
+  bids: [Bid!]! @derivedFrom(field: "auction")
+  settled: Boolean!
+}
+
+type Bid @entity {
+  id: ID! # bid tx hash
+  auction: Auction!
+  from: User!
+  value: BigInt! # uint128
+}
+
+type User @entity {
   id: ID!
-  count: BigInt!
-  auctionId: BigInt! # uint64
-  endTimestamp: BigInt! # uint256
+  donated: [Auction!]! @derivedFrom(field: "donor")
+  bids: [Bid!]! @derivedFrom(field: "from")
 }

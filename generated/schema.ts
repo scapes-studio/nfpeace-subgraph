@@ -11,31 +11,35 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class ExampleEntity extends Entity {
+export class Auction extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("count", Value.fromBigInt(BigInt.zero()));
-    this.set("auctionId", Value.fromBigInt(BigInt.zero()));
+    this.set("donor", Value.fromString(""));
+    this.set("startingPrice", Value.fromBigInt(BigInt.zero()));
     this.set("endTimestamp", Value.fromBigInt(BigInt.zero()));
+    this.set("tokenContract", Value.fromBytes(Bytes.empty()));
+    this.set("tokenId", Value.fromBigInt(BigInt.zero()));
+    this.set("tokenStandard", Value.fromI32(0));
+    this.set("tokenCount", Value.fromI32(0));
+    this.set("settled", Value.fromBoolean(false));
   }
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save ExampleEntity entity without an ID");
+    assert(id != null, "Cannot save Auction entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        "Cannot save ExampleEntity entity with non-string ID. " +
-          'Considering using .toHex() to convert the "id" to a string.'
+        `Entities of type Auction must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("ExampleEntity", id.toString(), this);
+      store.set("Auction", id.toString(), this);
     }
   }
 
-  static load(id: string): ExampleEntity | null {
-    return changetype<ExampleEntity | null>(store.get("ExampleEntity", id));
+  static load(id: string): Auction | null {
+    return changetype<Auction | null>(store.get("Auction", id));
   }
 
   get id(): string {
@@ -47,22 +51,22 @@ export class ExampleEntity extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get count(): BigInt {
-    let value = this.get("count");
+  get donor(): string {
+    let value = this.get("donor");
+    return value!.toString();
+  }
+
+  set donor(value: string) {
+    this.set("donor", Value.fromString(value));
+  }
+
+  get startingPrice(): BigInt {
+    let value = this.get("startingPrice");
     return value!.toBigInt();
   }
 
-  set count(value: BigInt) {
-    this.set("count", Value.fromBigInt(value));
-  }
-
-  get auctionId(): BigInt {
-    let value = this.get("auctionId");
-    return value!.toBigInt();
-  }
-
-  set auctionId(value: BigInt) {
-    this.set("auctionId", Value.fromBigInt(value));
+  set startingPrice(value: BigInt) {
+    this.set("startingPrice", Value.fromBigInt(value));
   }
 
   get endTimestamp(): BigInt {
@@ -72,5 +76,172 @@ export class ExampleEntity extends Entity {
 
   set endTimestamp(value: BigInt) {
     this.set("endTimestamp", Value.fromBigInt(value));
+  }
+
+  get tokenContract(): Bytes {
+    let value = this.get("tokenContract");
+    return value!.toBytes();
+  }
+
+  set tokenContract(value: Bytes) {
+    this.set("tokenContract", Value.fromBytes(value));
+  }
+
+  get tokenId(): BigInt {
+    let value = this.get("tokenId");
+    return value!.toBigInt();
+  }
+
+  set tokenId(value: BigInt) {
+    this.set("tokenId", Value.fromBigInt(value));
+  }
+
+  get tokenStandard(): i32 {
+    let value = this.get("tokenStandard");
+    return value!.toI32();
+  }
+
+  set tokenStandard(value: i32) {
+    this.set("tokenStandard", Value.fromI32(value));
+  }
+
+  get tokenCount(): i32 {
+    let value = this.get("tokenCount");
+    return value!.toI32();
+  }
+
+  set tokenCount(value: i32) {
+    this.set("tokenCount", Value.fromI32(value));
+  }
+
+  get bids(): Array<string> {
+    let value = this.get("bids");
+    return value!.toStringArray();
+  }
+
+  set bids(value: Array<string>) {
+    this.set("bids", Value.fromStringArray(value));
+  }
+
+  get settled(): boolean {
+    let value = this.get("settled");
+    return value!.toBoolean();
+  }
+
+  set settled(value: boolean) {
+    this.set("settled", Value.fromBoolean(value));
+  }
+}
+
+export class Bid extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("auction", Value.fromString(""));
+    this.set("from", Value.fromString(""));
+    this.set("value", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Bid entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Bid must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Bid", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Bid | null {
+    return changetype<Bid | null>(store.get("Bid", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get auction(): string {
+    let value = this.get("auction");
+    return value!.toString();
+  }
+
+  set auction(value: string) {
+    this.set("auction", Value.fromString(value));
+  }
+
+  get from(): string {
+    let value = this.get("from");
+    return value!.toString();
+  }
+
+  set from(value: string) {
+    this.set("from", Value.fromString(value));
+  }
+
+  get value(): BigInt {
+    let value = this.get("value");
+    return value!.toBigInt();
+  }
+
+  set value(value: BigInt) {
+    this.set("value", Value.fromBigInt(value));
+  }
+}
+
+export class User extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save User entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type User must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("User", id.toString(), this);
+    }
+  }
+
+  static load(id: string): User | null {
+    return changetype<User | null>(store.get("User", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get donated(): Array<string> {
+    let value = this.get("donated");
+    return value!.toStringArray();
+  }
+
+  set donated(value: Array<string>) {
+    this.set("donated", Value.fromStringArray(value));
+  }
+
+  get bids(): Array<string> {
+    let value = this.get("bids");
+    return value!.toStringArray();
+  }
+
+  set bids(value: Array<string>) {
+    this.set("bids", Value.fromStringArray(value));
   }
 }
