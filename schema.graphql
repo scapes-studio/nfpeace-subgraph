@@ -39,6 +39,11 @@ type Bid @entity {
 
 type User @entity {
   id: ID!
+
+  totalBidsVolume: BigInt!
+  totalVolumeDonated: BigInt!
+  donatedNFTsCount: Int!
+
   donated: [Auction!]! @derivedFrom(field: "donor")
   bids: [Bid!]! @derivedFrom(field: "from")
 }

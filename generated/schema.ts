@@ -347,6 +347,10 @@ export class User extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
+
+    this.set("totalBidsVolume", Value.fromBigInt(BigInt.zero()));
+    this.set("totalVolumeDonated", Value.fromBigInt(BigInt.zero()));
+    this.set("donatedNFTsCount", Value.fromI32(0));
   }
 
   save(): void {
@@ -372,6 +376,33 @@ export class User extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
+  }
+
+  get totalBidsVolume(): BigInt {
+    let value = this.get("totalBidsVolume");
+    return value!.toBigInt();
+  }
+
+  set totalBidsVolume(value: BigInt) {
+    this.set("totalBidsVolume", Value.fromBigInt(value));
+  }
+
+  get totalVolumeDonated(): BigInt {
+    let value = this.get("totalVolumeDonated");
+    return value!.toBigInt();
+  }
+
+  set totalVolumeDonated(value: BigInt) {
+    this.set("totalVolumeDonated", Value.fromBigInt(value));
+  }
+
+  get donatedNFTsCount(): i32 {
+    let value = this.get("donatedNFTsCount");
+    return value!.toI32();
+  }
+
+  set donatedNFTsCount(value: i32) {
+    this.set("donatedNFTsCount", Value.fromI32(value));
   }
 
   get donated(): Array<string> {

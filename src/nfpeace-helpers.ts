@@ -14,10 +14,11 @@ export function isV2 (auctionId: BigInt): bool {
   return auctionId >= INITIAL_AUCTION_ID_V2
 }
 
-export function saveUser (address: Address): User {
-  const user = new User(address.toString())
-  user.save()
-
+export function loadUser (address: Address): User {
+  let user = User.load(address.toHexString())
+  if (user == null) {
+    user = new User(address.toHexString())
+  }
   return user
 }
 
@@ -26,7 +27,10 @@ export function createAuction (
 ): void {
   const contract = NFPeaceContract.bind(event.address)
   const auctionObj = contract.getAuction(event.params.auctionId)
-  const donor = saveUser(auctionObj.value2)
+
+  const donor = loadUser(auctionObj.value2)
+  donor.donatedNFTsCount += 1
+  donor.save()
 
   let auction = new Auction(event.params.auctionId.toString())
   auction.donor = donor.id
@@ -55,7 +59,10 @@ export function loadAuction (id: string): Auction {
 }
 
 export function bidOnAuction (event: BidEvent): void {
-  saveUser(event.params.from)
+  // Update user
+  const user = loadUser(event.params.from)
+  user.totalBidsVolume = user.totalBidsVolume.plus(event.params.bid)
+  user.save()
 
   // Update Auction
   const auction = loadAuction(event.params.auctionId.toString())
@@ -63,7 +70,8 @@ export function bidOnAuction (event: BidEvent): void {
   auction.latestBid = event.params.bid
   auction.save()
 
-  let bid = new Bid(event.transaction.hash.toHex())
+  // Save Bid
+  const bid = new Bid(event.transaction.hash.toHex())
   bid.from = event.params.from.toHex()
   bid.value = event.params.bid
   bid.auction = event.params.auctionId.toString()
@@ -84,10 +92,16 @@ export function extendAuction (event: AuctionExtended): void {
 export function settleAuction (event: AuctionSettled): void {
   const auction = loadAuction(event.params.auctionId.toString())
 
+  // Update the auction
   auction.settledAt = event.block.timestamp
   auction.settledTransaction = event.transaction.hash.toHex()
   auction.settled = true
   auction.save()
+
+  // Update user
+  const buyer = loadUser(Address.fromString(auction.latestBidder))
+  buyer.totalVolumeDonated = buyer.totalVolumeDonated.plus(auction.latestBid)
+  buyer.save()
 
   updateTotalSettledVolume(auction.latestBid)
 }
