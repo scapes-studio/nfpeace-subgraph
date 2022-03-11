@@ -1,3 +1,9 @@
+type NFPeace @entity {
+  id: ID!
+  totalVolume: BigInt!
+  totalSettled: BigInt!
+}
+
 type Auction @entity {
   id: ID! # auctionId
   donor: User!

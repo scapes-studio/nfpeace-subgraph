@@ -11,6 +11,59 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
+export class NFPeace extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("totalVolume", Value.fromBigInt(BigInt.zero()));
+    this.set("totalSettled", Value.fromBigInt(BigInt.zero()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save NFPeace entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type NFPeace must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("NFPeace", id.toString(), this);
+    }
+  }
+
+  static load(id: string): NFPeace | null {
+    return changetype<NFPeace | null>(store.get("NFPeace", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get totalVolume(): BigInt {
+    let value = this.get("totalVolume");
+    return value!.toBigInt();
+  }
+
+  set totalVolume(value: BigInt) {
+    this.set("totalVolume", Value.fromBigInt(value));
+  }
+
+  get totalSettled(): BigInt {
+    let value = this.get("totalSettled");
+    return value!.toBigInt();
+  }
+
+  set totalSettled(value: BigInt) {
+    this.set("totalSettled", Value.fromBigInt(value));
+  }
+}
+
 export class Auction extends Entity {
   constructor(id: string) {
     super();
