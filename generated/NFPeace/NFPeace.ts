@@ -94,7 +94,7 @@ export class Bid__Params {
   }
 }
 
-export class NFPeaceV1__getAuctionResult {
+export class NFPeace__getAuctionResult {
   value0: Address;
   value1: BigInt;
   value2: Address;
@@ -148,9 +148,9 @@ export class NFPeaceV1__getAuctionResult {
   }
 }
 
-export class NFPeaceV1 extends ethereum.SmartContract {
-  static bind(address: Address): NFPeaceV1 {
-    return new NFPeaceV1("NFPeaceV1", address);
+export class NFPeace extends ethereum.SmartContract {
+  static bind(address: Address): NFPeace {
+    return new NFPeace("NFPeace", address);
   }
 
   BIDDING_GRACE_PERIOD(): BigInt {
@@ -283,14 +283,14 @@ export class NFPeaceV1 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getAuction(auctionId: BigInt): NFPeaceV1__getAuctionResult {
+  getAuction(auctionId: BigInt): NFPeace__getAuctionResult {
     let result = super.call(
       "getAuction",
       "getAuction(uint64):(address,uint256,address,uint128,uint64,uint32,uint16,uint8,bool)",
       [ethereum.Value.fromUnsignedBigInt(auctionId)]
     );
 
-    return new NFPeaceV1__getAuctionResult(
+    return new NFPeace__getAuctionResult(
       result[0].toAddress(),
       result[1].toBigInt(),
       result[2].toAddress(),
@@ -305,7 +305,7 @@ export class NFPeaceV1 extends ethereum.SmartContract {
 
   try_getAuction(
     auctionId: BigInt
-  ): ethereum.CallResult<NFPeaceV1__getAuctionResult> {
+  ): ethereum.CallResult<NFPeace__getAuctionResult> {
     let result = super.tryCall(
       "getAuction",
       "getAuction(uint64):(address,uint256,address,uint128,uint64,uint32,uint16,uint8,bool)",
@@ -316,7 +316,7 @@ export class NFPeaceV1 extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      new NFPeaceV1__getAuctionResult(
+      new NFPeace__getAuctionResult(
         value[0].toAddress(),
         value[1].toBigInt(),
         value[2].toAddress(),

@@ -1,29 +1,24 @@
-import { BigInt } from '@graphprotocol/graph-ts'
 import {
-  NFPeaceV1,
-  AuctionExtended as AuctionExtendedEvent,
-  AuctionInitialised as AuctionInitialisedEvent,
-  AuctionSettled as AuctionSettledEvent,
+  AuctionExtended,
+  AuctionInitialised,
+  AuctionSettled,
   Bid as BidEvent
-} from '../generated/NFPeaceV1/NFPeaceV1'
-import { bid, createAuction, extendAuction, settleAuction } from './nfpeace-helpers'
+} from '../generated/NFPeace/NFPeace'
+import { createAuction, extendAuction, settleAuction, bidOnAuction, isV2 } from './nfpeace-helpers'
 
-const INITIAL_AUCTION_ID_V2 = BigInt.fromString('12')
-const isV2 = (auctionId: BigInt): bool => auctionId >= INITIAL_AUCTION_ID_V2
-
-export function handleAuctionInitialised(event: AuctionInitialisedEvent): void {
+export function handleAuctionInitialised(event: AuctionInitialised): void {
   if (isV2(event.params.auctionId)) return
 
-  createAuction(NFPeaceV1.bind(event.address), event)
+  createAuction(event)
 }
 
-export function handleAuctionExtended(event: AuctionExtendedEvent): void {
+export function handleAuctionExtended(event: AuctionExtended): void {
   if (isV2(event.params.auctionId)) return
 
   extendAuction(event)
 }
 
-export function handleAuctionSettled(event: AuctionSettledEvent): void {
+export function handleAuctionSettled(event: AuctionSettled): void {
   if (isV2(event.params.auctionId)) return
 
   settleAuction(event)
@@ -32,5 +27,5 @@ export function handleAuctionSettled(event: AuctionSettledEvent): void {
 export function handleBid(event: BidEvent): void {
   if (isV2(event.params.auctionId)) return
 
-  bid(event)
+  bidOnAuction(event)
 }

@@ -1,24 +1,23 @@
 import {
-  NFPeaceV2,
-  AuctionExtended as AuctionExtendedEvent,
-  AuctionInitialised as AuctionInitialisedEvent,
-  AuctionSettled as AuctionSettledEvent,
+  AuctionExtended,
+  AuctionInitialised,
+  AuctionSettled,
   Bid as BidEvent
-} from '../generated/NFPeaceV2/NFPeaceV2'
-import { bid, createAuction, extendAuction, settleAuction } from './nfpeace-helpers'
+} from '../generated/NFPeace/NFPeace'
+import { createAuction, extendAuction, settleAuction, bidOnAuction } from './nfpeace-helpers'
 
-export function handleAuctionInitialised(event: AuctionInitialisedEvent): void {
-  createAuction(NFPeaceV2.bind(event.address), event)
+export function handleAuctionInitialised(event: AuctionInitialised): void {
+  createAuction(event)
 }
 
-export function handleAuctionExtended(event: AuctionExtendedEvent): void {
+export function handleAuctionExtended(event: AuctionExtended): void {
   extendAuction(event)
 }
 
-export function handleAuctionSettled(event: AuctionSettledEvent): void {
+export function handleAuctionSettled(event: AuctionSettled): void {
   settleAuction(event)
 }
 
 export function handleBid(event: BidEvent): void {
-  bid(event)
+  bidOnAuction(event)
 }

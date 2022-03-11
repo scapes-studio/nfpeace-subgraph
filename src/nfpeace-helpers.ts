@@ -1,19 +1,18 @@
 import { Address, BigInt, log } from '@graphprotocol/graph-ts'
 import {
-  NFPeaceV1,
-  AuctionInitialised as AuctionInitialisedV1,
-  AuctionExtended as AuctionExtendedV1,
-  AuctionSettled as AuctionSettledV1,
-  Bid as BidEventV1,
-} from '../generated/NFPeaceV1/NFPeaceV1'
-import {
-  NFPeaceV2 ,
-  AuctionInitialised as AuctionInitialisedV2,
-  AuctionExtended as AuctionExtendedV2,
-  AuctionSettled as AuctionSettledV2,
-  Bid as BidEventV2,
-} from '../generated/NFPeaceV2/NFPeaceV2'
+  NFPeace as NFPeaceContract,
+  AuctionInitialised,
+  AuctionExtended,
+  AuctionSettled,
+  Bid as BidEvent,
+} from '../generated/NFPeace/NFPeace'
 import { Auction, Bid, NFPeace, User } from '../generated/schema'
+
+const INITIAL_AUCTION_ID_V2 = BigInt.fromString('12')
+
+export function isV2 (auctionId: BigInt): bool {
+  return auctionId >= INITIAL_AUCTION_ID_V2
+}
 
 export function saveUser (address: Address): User {
   const user = new User(address.toString())
@@ -23,18 +22,20 @@ export function saveUser (address: Address): User {
 }
 
 export function createAuction (
-  contract: NFPeaceV1|NFPeaceV2,
-  event: AuctionInitialisedV1|AuctionInitialisedV2
+  event: AuctionInitialised,
 ): void {
+  const contract = NFPeaceContract.bind(event.address)
   const auctionObj = contract.getAuction(event.params.auctionId)
   const donor = saveUser(auctionObj.value2)
 
   let auction = new Auction(event.params.auctionId.toString())
   auction.donor = donor.id
-  auction.startingPrice = auctionObj.value4
-  auction.endTimestamp = auctionObj.value5
   auction.tokenContract = auctionObj.value0
   auction.tokenId = auctionObj.value1
+  auction.latestBidder = auctionObj.value2.toHexString()
+  auction.latestBid = auctionObj.value3
+  auction.startingPrice = auctionObj.value4
+  auction.endTimestamp = auctionObj.value5
   auction.tokenStandard = auctionObj.value6
   auction.tokenCount = auctionObj.value7
   auction.settled = auctionObj.value8
@@ -53,7 +54,7 @@ export function loadAuction (id: string): Auction {
   return auction
 }
 
-export function bid (event: BidEventV1|BidEventV2): void {
+export function bidOnAuction (event: BidEvent): void {
   saveUser(event.params.from)
 
   // Update Auction
@@ -73,14 +74,14 @@ export function bid (event: BidEventV1|BidEventV2): void {
   updateTotalVolume(bid.value)
 }
 
-export function extendAuction (event: AuctionExtendedV1|AuctionExtendedV2): void {
+export function extendAuction (event: AuctionExtended): void {
   const auction = loadAuction(event.params.auctionId.toString())
 
   auction.endTimestamp = event.params.endTimestamp
   auction.save()
 }
 
-export function settleAuction (event: AuctionSettledV1|AuctionSettledV2): void {
+export function settleAuction (event: AuctionSettled): void {
   const auction = loadAuction(event.params.auctionId.toString())
 
   auction.settledAt = event.block.timestamp
