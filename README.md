@@ -1,6 +1,7 @@
 # NFPeace Subgraph
 
 ## Links
+- [Subgraph](https://thegraph.com/hosted-service/subgraph/jwahdatehagh/nfpeace)
 - [Subgraph Query Tool](https://api.thegraph.com/subgraphs/name/jwahdatehagh/nfpeace/graphql)
 - [Subgraph HTTP Endpoint](https://api.thegraph.com/subgraphs/name/jwahdatehagh/nfpeace) (`https://api.thegraph.com/subgraphs/name/jwahdatehagh/nfpeace`)
 
